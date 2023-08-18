@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "895734210430",
+    "project_id": "yt-recreation",
+    "storage_bucket": "yt-recreation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895734210430:android:4645e0a9cad39f60899d2f",
+        "android_client_info": {
+          "package_name": "site.ritom.youtube"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "895734210430-qken0u7jgt2itb1jqesrjrjddmgefmiu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCr54LDn0CH3FU79WcST1ueQLorQu57lW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "895734210430-qken0u7jgt2itb1jqesrjrjddmgefmiu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "895734210430-1t1fpc5n5vrmc1e35c39bnk43kfg9e1h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "site.ritom.youtube"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
