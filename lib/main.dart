@@ -56,7 +56,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   var _index = 0;
-  StatefulWidget _currentBody = HomePage();
+  StatefulWidget _currentBody = const HomePage();
 
   void _changeIndex(int newIndex) {
       setState(() {
@@ -68,10 +68,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final pages = [
-    HomePage(),
-    NotificationPage(),
-    SubscriptionPage(),
-    LibraryPage(),
+    const HomePage(),
+    const NotificationPage(),
+    const SubscriptionPage(),
+    const LibraryPage(),
   ];
 
   final nav = [
