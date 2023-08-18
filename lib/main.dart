@@ -1,6 +1,9 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart' as auth_ui;
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart' as auth_google;
 import 'package:flutter/material.dart';
 import 'package:youtube/nav_pages/home.dart';
 import 'package:youtube/nav_pages/library.dart';
@@ -84,20 +87,34 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Youtube",textAlign: TextAlign.center,),
-        leading: const Center(
-            child: Image(image:
-            AssetImage('assets/Youtube.png'),
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return auth_ui.SignInScreen(
+            providers: [
+              auth_ui.EmailAuthProvider(),
+              auth_google.GoogleProvider(clientId: "895734210430-uc47lqjp40uo1ip4dudnim2skn1uhnop.apps.googleusercontent.com"),
+            ],
+          );
+        }
+
+        return Scaffold(
+            appBar: AppBar(
+              title: const Text("Youtube",textAlign: TextAlign.center,),
+              leading: const Center(
+                child: Image(image:
+                AssetImage('assets/Youtube.png'),
+                ),
+              ),
             ),
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(items: nav,
-        currentIndex: _index,
-        onTap: _changeIndex,
-      ),
-      body: _currentBody
+            bottomNavigationBar: BottomNavigationBar(items: nav,
+              currentIndex: _index,
+              onTap: _changeIndex,
+            ),
+            body: _currentBody
+        );
+      },
     );
   }
 }
