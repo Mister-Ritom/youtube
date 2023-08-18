@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 class SubscriptionPage extends StatefulWidget {
+  const SubscriptionPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return SubscriptionPageState();

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 class NotificationPage extends StatefulWidget {
+  const NotificationPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return NotificationPageState();
