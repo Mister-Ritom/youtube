@@ -1,15 +1,9 @@
 import 'dart:ui';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_ui_auth/firebase_ui_auth.dart' as auth_ui;
-import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart' as auth_google;
 import 'package:flutter/material.dart';
-import 'package:youtube/nav_pages/home.dart';
-import 'package:youtube/nav_pages/library.dart';
-import 'package:youtube/nav_pages/notifications.dart';
-import 'package:youtube/nav_pages/subscriptions.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:youtube/pages/youtube_page.dart';
 
 import 'firebase_options.dart';
 
@@ -23,98 +17,32 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-  runApp(const MyApp());
+  runApp(
+    const YoutubeApp()
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class YoutubeApp extends StatelessWidget {
+  const YoutubeApp({super.key});
+
+  final bottomNavTheme = const BottomNavigationBarThemeData(
+    showUnselectedLabels: false,
+    selectedLabelStyle: TextStyle(fontSize: 14),
+    type: BottomNavigationBarType.fixed,
+  );
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: "YoutubeApp",
       theme: ThemeData.light(useMaterial3: true).copyWith(
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            type: BottomNavigationBarType.fixed,
-          )
+          bottomNavigationBarTheme: bottomNavTheme
       ),
       darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            type: BottomNavigationBarType.fixed,
-          )
+          bottomNavigationBarTheme: bottomNavTheme
       ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  var _index = 0;
-  StatefulWidget _currentBody = const HomePage();
-
-  void _changeIndex(int newIndex) {
-      setState(() {
-        _index = newIndex;
-        if(newIndex!=3){
-          _currentBody = pages[newIndex];
-        }
-      });
-  }
-
-  final pages = [
-    const HomePage(),
-    const NotificationPage(),
-    const SubscriptionPage(),
-    const LibraryPage(),
-  ];
-
-  final nav = [
-    const BottomNavigationBarItem(icon: Icon(Icons.home),label: "Home"),
-    const BottomNavigationBarItem(icon: Icon(Icons.notifications),label: "Notifications"),
-    const BottomNavigationBarItem(icon: Icon(Icons.add),label: "Add post"),
-    const BottomNavigationBarItem(icon: Icon(Icons.subscriptions),label: "Subscriptions"),
-    const BottomNavigationBarItem(icon: Icon(Icons.video_library),label: "Library")
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return auth_ui.SignInScreen(
-            providers: [
-              auth_ui.EmailAuthProvider(),
-              auth_google.GoogleProvider(clientId: "895734210430-uc47lqjp40uo1ip4dudnim2skn1uhnop.apps.googleusercontent.com"),
-            ],
-          );
-        }
-
-        return Scaffold(
-            appBar: AppBar(
-              title: const Text("Youtube",textAlign: TextAlign.center,),
-              leading: const Center(
-                child: Image(image:
-                AssetImage('assets/Youtube.png'),
-                ),
-              ),
-            ),
-            bottomNavigationBar: BottomNavigationBar(items: nav,
-              currentIndex: _index,
-              onTap: _changeIndex,
-            ),
-            body: _currentBody
-        );
-      },
+      home: const YoutubePage(),
     );
   }
 }
