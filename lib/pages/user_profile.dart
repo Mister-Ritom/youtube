@@ -11,6 +11,6 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
-    return Text("TODO");
+    return const Text("TODO");
   }
 }

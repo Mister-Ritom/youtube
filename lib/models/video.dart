@@ -1,7 +1,7 @@
 enum VideoPrivacy {
-  PUBLIC,
-  PRIVATE,
-  LINK_ONLY
+  public,
+  private,
+  linkOnly
 }
 
 class Video {
@@ -65,12 +65,12 @@ class Video {
 
   static VideoPrivacy _parsePrivacy(String privacy) {
     switch (privacy) {
-      case 'VideoPrivacy.PUBLIC':
-        return VideoPrivacy.PUBLIC;
-      case 'VideoPrivacy.PRIVATE':
-        return VideoPrivacy.PRIVATE;
-      case 'VideoPrivacy.LINK_ONLY':
-        return VideoPrivacy.LINK_ONLY;
+      case 'VideoPrivacy.public':
+        return VideoPrivacy.public;
+      case 'VideoPrivacy.private':
+        return VideoPrivacy.private;
+      case 'VideoPrivacy.linkOnly':
+        return VideoPrivacy.linkOnly;
       default:
         throw ArgumentError("Invalid VideoPrivacy value: $privacy");
     }

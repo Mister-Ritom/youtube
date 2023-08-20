@@ -82,14 +82,34 @@ class _UploadPageState extends State<UploadPage> {
     super.dispose();
   }
 
+  Future<String> uploadThumbnail(String videoId)async {
+    if(_thumbnail!=null) {
+      final DateTime now = DateTime.now();
+      final int millSeconds = now.millisecondsSinceEpoch;
+      final userId = getCurrentUser().uid;
+      final storageRef = FirebaseStorage.instance.ref("thumbnails/$userId/$videoId/$millSeconds");
+      try {
+        await storageRef.putData(_thumbnail!);
+        return await storageRef.getDownloadURL();
+      }
+      catch(e,stack) {
+        storageRef.delete();
+        FirebaseCrashlytics.instance.recordError(e, stack);
+        Navigator.pop(context);
+      }
+    }
+    return "";
+  }
+
   void uploadVideoFireStore() async {
     try {
       final userId = getCurrentUser().uid;
       final DateTime now = DateTime.now();
       final int millSeconds = now.millisecondsSinceEpoch;
+      final thumbnailLink = await uploadThumbnail(millSeconds.toString());
       final video = Video(ownerId: userId,
           id: millSeconds.toString(),title: title,description: description,
-          thumbnail: '', privacy: VideoPrivacy.PUBLIC,uploadTime: millSeconds);//TODO
+          thumbnail: thumbnailLink, privacy: VideoPrivacy.public,uploadTime: millSeconds);
 
       CollectionReference videosCollection = FirebaseFirestore.instance
           .collection('user_videos')
@@ -112,7 +132,6 @@ class _UploadPageState extends State<UploadPage> {
         _startedUploading = true;
       });
       _controller.dispose();
-      final storage = FirebaseStorage.instance;
       final DateTime now = DateTime.now();
       final int millSeconds = now.millisecondsSinceEpoch;
       final userId = getCurrentUser().uid;
