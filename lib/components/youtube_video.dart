@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:youtube/components/user_avatar.dart';
 import 'package:youtube/models/user.dart';
 import 'package:youtube/models/video.dart';
 
@@ -23,7 +24,6 @@ class _YoutubeVideoState extends State<YoutubeVideo> {
         final minutes  = (seconds/60).round();
         if (minutes>=60) {
           final hours  = (minutes/60).round();
-          print("Hours $hours");
           if (hours>=24) {
             var days = (hours/24).round();
             text = "$days days"; //More can be added
@@ -51,6 +51,10 @@ class _YoutubeVideoState extends State<YoutubeVideo> {
     setState(() {
       user = UserModel.fromJson(userDoc.data()!);
     });
+  }
+
+  void gotoUser() {
+
   }
 
   @override
@@ -127,11 +131,7 @@ class _YoutubeVideoState extends State<YoutubeVideo> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    CircleAvatar(
-                      foregroundImage: NetworkImage(user?.profileImage??""),
-                      backgroundColor: Theme.of(context).colorScheme.inverseSurface.withAlpha(30),
-                      radius: 20,
-                    ),
+                    UserAvatar(profileImage: user?.profileImage, onPress: gotoUser),
                     buildBottomWidget(),
                     IconButton(
                         onPressed: _openMenu,

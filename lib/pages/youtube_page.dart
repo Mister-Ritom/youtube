@@ -8,6 +8,7 @@ import 'package:youtube/nav_pages/library.dart';
 import 'package:youtube/nav_pages/notifications.dart';
 import 'package:youtube/nav_pages/subscriptions.dart';
 import 'package:youtube/pages/upload_video.dart';
+import 'package:youtube/pages/user_profile.dart';
 
 class YoutubePage extends StatefulWidget {
   const YoutubePage({super.key});
@@ -109,6 +110,14 @@ class _YoutubePageState extends State<YoutubePage> {
         icon: Icon(Icons.video_library), label: "Library")
   ];
 
+  void gotoCurrentUser() {
+    Navigator.push(
+      context,
+        MaterialPageRoute(builder: (context) =>
+          UserProfile(userId: FirebaseAuth.instance.currentUser!.uid,))
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
@@ -167,6 +176,15 @@ class _YoutubePageState extends State<YoutubePage> {
                 AssetImage('assets/Youtube.png'),
                 ),
               ),
+              actions: [
+                 Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: InkWell(
+                    onTap: gotoCurrentUser,
+                    child: const UserAvatar(size: 48,),
+                  ),
+                )
+              ],
             ),
             bottomNavigationBar: BottomNavigationBar(
               items: nav,

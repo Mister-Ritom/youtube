@@ -27,7 +27,9 @@ class HomePageState extends State<HomePage> {
     for (String subscriberId in subscribers.data()?["user_ids"]) {
       final collection = await FirebaseFirestore.instance.
       collection("user_videos").doc(subscriberId)
-          .collection("videos").get();
+          .collection("videos")
+          .orderBy("uploadTime",descending: true)
+          .get();
       for (DocumentSnapshot snapshot in collection.docs) {
         final data = snapshot.data() as Map<String, dynamic>;
         final video = Video.fromJson(data);
