@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class LibraryPage extends StatefulWidget {
+  const LibraryPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return HomePageState();
+    return LibraryPageState();
   }
 
 }
-class HomePageState extends State<HomePage> {
+class LibraryPageState extends State<LibraryPage> {
   @override
   Widget build(BuildContext context) {
     return const Column(

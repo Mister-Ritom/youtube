@@ -25,7 +25,7 @@ class _YoutubeVideoState extends State<YoutubeVideo> {
           final hours  = (minutes/60).round();
           print("Hours $hours");
           if (hours>=24) {
-            var days = hours/24;
+            var days = (hours/24).round();
             text = "$days days"; //More can be added
           }
           else {

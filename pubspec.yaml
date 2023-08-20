@@ -46,7 +46,6 @@ dependencies:
   image_picker: ^1.0.2
   video_player: ^2.7.0
   video_thumbnail: ^0.5.3
-  async: ^2.11.0
 
 dev_dependencies:
   flutter_test:

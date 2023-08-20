@@ -18,7 +18,7 @@ packages:
     source: hosted
     version: "2.4.2"
   async:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: async
       sha256: "947bfcf187f74dbc5e146c9eb9c0f10c9f8b30743e341481c1e2ed3ecc18c20c"
@@ -301,18 +301,18 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_ui_auth
-      sha256: c597e1482ba8f4d3db0f9b97d839754ad76dba514bd1ee94d31a0126d5a3e287
+      sha256: "529860c44b846ec02ee3a96465e6ef7ad5a6f095b2ad6c8fe838459f90374216"
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.3"
+    version: "1.6.4"
   firebase_ui_localizations:
     dependency: transitive
     description:
       name: firebase_ui_localizations
-      sha256: "830bd79f3e4ccfb4b8ee83e9928de6be97ce1bc80b1b4c16bce8565eb5b48a37"
+      sha256: "94fa64ec3abc7a27d52a2072eb0acb7b6f300a248ea5988e3cedff0beb46b854"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.1"
+    version: "1.5.2"
   firebase_ui_oauth:
     dependency: transitive
     description:
@@ -333,10 +333,10 @@ packages:
     dependency: transitive
     description:
       name: firebase_ui_shared
-      sha256: "6f36f067d955d41591aacf68aafbaec7053571f2f6ed495da8bfa803f7c633b7"
+      sha256: "48324f76339ba9bd0242a08b5a8843d0b57a6ab9af46ac426fc24122f6eb944b"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
+    version: "1.3.1"
   flutter:
     dependency: "direct main"
     description: flutter
