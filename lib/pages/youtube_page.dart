@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as auth_ui;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart' as auth_google;
@@ -8,7 +10,9 @@ import 'package:youtube/nav_pages/library.dart';
 import 'package:youtube/nav_pages/notifications.dart';
 import 'package:youtube/nav_pages/subscriptions.dart';
 import 'package:youtube/pages/upload_video.dart';
-import 'package:youtube/pages/user_profile.dart';
+import 'package:youtube/pages/channel_page.dart';
+
+import '../models/user.dart';
 
 class YoutubePage extends StatefulWidget {
   const YoutubePage({super.key});
@@ -22,12 +26,53 @@ class _YoutubePageState extends State<YoutubePage> {
   var _index = 0;
   StatefulWidget _currentBody = const HomePage();
 
+  late UserModel newUser;
+
+  Future<void> checkAndCreateUser(User user) async {
+    final usersCollection = FirebaseFirestore.instance.collection('users');
+
+    // Check if the user document already exists
+    final userDoc = await usersCollection.doc(user.uid).get();
+
+    if (!userDoc.exists) {
+      String newName = user.displayName?? user.email!.split("@")[0];
+      newUser = UserModel(id: user.uid, name: newName, username: user.uid, email: user.email!,
+          profileImage: user.photoURL);
+      await usersCollection.doc(user.uid).set(newUser.toJson());
+    }
+    else {
+      final data = userDoc.data();
+      if (data!=null) {
+        newUser = UserModel.fromJson(data);
+      }
+      else {
+        throw Exception("User Doc exists but data is null");
+      }
+    }
+  }
+
+  Future<String> onState() async {
+    try {
+      User? firebaseUser = FirebaseAuth.instance.currentUser;
+      if (firebaseUser!=null) {
+        await checkAndCreateUser(firebaseUser);
+      }
+    }
+    catch(e,stacktrace) {
+      FirebaseCrashlytics.instance.recordError(e,stacktrace);
+    }
+    return "Done";
+  }
+
   void _changeIndex(int newIndex) {
     setState(() {
       _index = newIndex;
       if (newIndex == 2) {
         _index = 0;
         showModalBottomSheet(context: context, builder: buildUploadButton);
+      }
+      else if (newIndex == 4) {
+        _currentBody = pages[3];
       }
       else {
         _currentBody = pages[newIndex];
@@ -114,7 +159,7 @@ class _YoutubePageState extends State<YoutubePage> {
     Navigator.push(
       context,
         MaterialPageRoute(builder: (context) =>
-          UserProfile(userId: FirebaseAuth.instance.currentUser!.uid,))
+          ChannelPage(user: newUser))
       );
   }
 
@@ -167,33 +212,52 @@ class _YoutubePageState extends State<YoutubePage> {
             },
           );
         }
-
-        return Scaffold(
-            appBar: AppBar(
-              title: const Text("Youtube", textAlign: TextAlign.center,),
-              leading: const Center(
-                child: Image(image:
-                AssetImage('assets/Youtube.png'),
-                ),
-              ),
-              actions: [
-                 Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: InkWell(
-                    onTap: gotoCurrentUser,
-                    child: const UserAvatar(size: 48,),
+        else {
+          return FutureBuilder(
+            future: onState(),
+            builder: (futureContext,snapshot){
+              if (!snapshot.hasData) {
+                return SafeArea(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("Creating user data",style: Theme.of(context).textTheme.bodyLarge,),
+                        const CircularProgressIndicator(),
+                      ],
+                    ),
                   ),
-                )
-              ],
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-              items: nav,
-              currentIndex: _index,
-              onTap: _changeIndex,
-              iconSize: 20,
-            ),
-            body: _currentBody
-        );
+                );
+              }
+                return Scaffold(
+                    appBar: AppBar(
+                      title: const Text("Youtube", textAlign: TextAlign.center,),
+                      leading: const Center(
+                        child: Image(image:
+                        AssetImage('assets/Youtube.png'),
+                        ),
+                      ),
+                      actions: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16),
+                          child: InkWell(
+                            onTap: gotoCurrentUser,
+                            child: const UserAvatar(size: 48,),
+                          ),
+                        )
+                      ],
+                    ),
+                    bottomNavigationBar: BottomNavigationBar(
+                      items: nav,
+                      currentIndex: _index,
+                      onTap: _changeIndex,
+                      iconSize: 20,
+                    ),
+                    body: _currentBody
+                );
+          });
+        }
       },
     );
   }

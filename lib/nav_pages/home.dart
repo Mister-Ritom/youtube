@@ -29,11 +29,8 @@ class HomePageState extends State<HomePage> {
           .collection("videos")
           .orderBy("uploadTime",descending: true)
           .get();
-      for (DocumentSnapshot snapshot in collection.docs) {
-        final data = snapshot.data() as Map<String, dynamic>;
-        final video = Video.fromJson(data);
-        videos.add(video);
-      }
+      final data = collection.docs.map((e) => Video.fromJson(e.data())).toList();
+      videos.addAll(data);
     }
     videos.shuffle();
     return videos;

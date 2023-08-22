@@ -152,8 +152,18 @@ class _UploadPageState extends State<UploadPage> {
     title = newTitle;
   }
 
-  void _addDescription() {
+  var _descriptionVisible = false;
 
+  void _addDescription() {
+    setState(() {
+      _descriptionVisible = true;
+    });
+  }
+
+  void changeDescription(String desc) {
+    setState(() {
+      description = desc;
+    });
   }
 
   void _changeVisibility() {
@@ -278,6 +288,13 @@ class _UploadPageState extends State<UploadPage> {
   }
 
   Widget getBody() {
+    if (_descriptionVisible) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 16,right: 16),
+          child: TextField(minLines: 12,maxLines: 20, onChanged: changeDescription,
+          )
+      );
+    }
     if (_startedUploading) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -310,6 +327,17 @@ class _UploadPageState extends State<UploadPage> {
     }
   }
 
+  void onSubmit () {
+    if (_descriptionVisible) {
+      setState(() {
+        _descriptionVisible = false;
+      });
+    }
+    else {
+      uploadVideoFireStore();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -317,7 +345,7 @@ class _UploadPageState extends State<UploadPage> {
         automaticallyImplyLeading:false,
         title: const Text("Upload a new video"),
         actions: [
-          IconButton(onPressed: uploadVideoFireStore, icon: const Icon(Icons.done))
+          IconButton(onPressed: onSubmit, icon: const Icon(Icons.done))
         ],
       ),
       body: getBody()
